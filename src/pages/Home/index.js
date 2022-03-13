@@ -1,13 +1,15 @@
-import React, { useState, useCallback } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { Keyboard, TouchableWithoutFeedback } from "react-native";
+
+import Button from "../../components/Button";
+import Input from "../../components/Input";
 
 import {
   Container,
   Title,
-  Button,
-  ButtonText,
-  Input,
+  Greetings,
   List,
+  ListTitle,
   ListEmptyContainer,
   ListEmptyIcon,
   ListEmptyText,
@@ -16,6 +18,7 @@ import {
 } from "./styles";
 
 export const Home = () => {
+  const [greeting, setGreeting] = useState(null);
   const [skill, setSkill] = useState(null);
   const [skills, addSkill] = useState([]);
 
@@ -34,22 +37,37 @@ export const Home = () => {
     addSkill((prev) => [skill, ...prev]);
   }, [skill, skills]);
 
+  useEffect(() => {
+    const currentHour = new Date().getHours();
+
+    if (currentHour < 12) {
+      setGreeting("Good morning");
+    } else if (currentHour >= 12 && currentHour < 18) {
+      setGreeting("Good afternoon");
+    } else {
+      setGreeting("Good nigth");
+    }
+  }, []);
+
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
       <Container>
         <Title>Welcome, Guilherme</Title>
+        <Greetings>{greeting}</Greetings>
         <Input
+          value={skill}
+          onChangeText={setSkill}
+          onSubmitEditing={handleAdd}
           placeholder="New skill"
           placeholderTextColor="#555"
-          onChangeText={setSkill}
-          value={skill}
-          onSubmitEditing={handleAdd}
         />
         <Button activeOpacity={0.7} onPress={handleAdd}>
-          <ButtonText>Add</ButtonText>
+          Add
         </Button>
+        <ListTitle>My Skills</ListTitle>
         <List
           data={skills}
+          keyExtractor={(item) => item}
           ListEmptyComponent={() => (
             <ListEmptyContainer>
               <ListEmptyIcon>¯\_(ツ)_/¯</ListEmptyIcon>
@@ -58,7 +76,7 @@ export const Home = () => {
           )}
           renderItem={({ item }) => (
             <ListItemContainer activeOpacity={0.7}>
-              <ListItem key={item}>{item}</ListItem>
+              <ListItem>{item}</ListItem>
             </ListItemContainer>
           )}
         />
