@@ -1,3 +1,4 @@
+import { FlatList } from "react-native";
 import styled from "styled-components/native";
 
 export const Container = styled.View`
@@ -19,11 +20,7 @@ export const Greetings = styled.Text`
   font-size: 12px;
 `;
 
-export const List = styled.FlatList`
-  margin-top: 25px;
-`;
-
-export const ListTitle = styled.Text`
+export const FlatListTitle = styled.Text`
   color: #fff;
   font-size: 16px;
   font-weight: bold;
@@ -31,34 +28,34 @@ export const ListTitle = styled.Text`
   margin-top: 30px;
 `;
 
-export const ListEmptyContainer = styled.View`
+export const FlatListEmptyContainer = styled.View`
   flex: 1;
   align-items: center;
   justify-content: center;
 `;
 
-export const ListEmptyIcon = styled.Text`
+export const FlatListEmptyIcon = styled.Text`
   color: #fff;
   font-size: 17px;
   padding: 5px;
   text-align: center;
 `;
 
-export const ListEmptyText = styled.Text`
+export const FlatListEmptyText = styled.Text`
   color: #fff;
   font-size: 17px;
   padding: 5px;
   text-align: center;
 `;
 
-export const ListItemContainer = styled.TouchableOpacity`
+export const FlatListItemContainer = styled.TouchableOpacity`
   padding: 15px;
   margin-bottom: 15px;
   border-radius: 99px;
   background-color: #1f1e25;
 `;
 
-export const ListItem = styled.Text`
+export const FlatListItem = styled.Text`
   color: #fff;
   font-size: 17px;
 `;

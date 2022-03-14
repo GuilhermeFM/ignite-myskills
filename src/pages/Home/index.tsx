@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useCallback } from "react";
-import { Keyboard, TouchableWithoutFeedback } from "react-native";
+import { FlatList, Keyboard, TouchableWithoutFeedback } from "react-native";
 
 import Button from "../../components/Button";
 import Input from "../../components/Input";
@@ -8,19 +8,18 @@ import {
   Container,
   Title,
   Greetings,
-  List,
-  ListTitle,
-  ListEmptyContainer,
-  ListEmptyIcon,
-  ListEmptyText,
-  ListItem,
-  ListItemContainer,
+  FlatListTitle,
+  FlatListEmptyContainer,
+  FlatListEmptyIcon,
+  FlatListEmptyText,
+  FlatListItem,
+  FlatListItemContainer,
 } from "./styles";
 
-export const Home = () => {
-  const [greeting, setGreeting] = useState(null);
-  const [skill, setSkill] = useState(null);
-  const [skills, addSkill] = useState([]);
+export const Home: React.FC = () => {
+  const [greeting, setGreeting] = useState<string | null>(null);
+  const [skill, setSkill] = useState<string | null>(null);
+  const [skills, addSkill] = useState<string[]>([]);
 
   const handleAdd = useCallback(() => {
     if (!skill) {
@@ -64,20 +63,23 @@ export const Home = () => {
         <Button activeOpacity={0.7} onPress={handleAdd}>
           Add
         </Button>
-        <ListTitle>My Skills</ListTitle>
-        <List
+        <FlatListTitle>My Skills</FlatListTitle>
+        <FlatList<string>
+          style={{ marginTop: 20 }}
           data={skills}
           keyExtractor={(item) => item}
           ListEmptyComponent={() => (
-            <ListEmptyContainer>
-              <ListEmptyIcon>¯\_(ツ)_/¯</ListEmptyIcon>
-              <ListEmptyText>You don't have any skill yet</ListEmptyText>
-            </ListEmptyContainer>
+            <FlatListEmptyContainer>
+              <FlatListEmptyIcon>¯\_(ツ)_/¯</FlatListEmptyIcon>
+              <FlatListEmptyText>
+                You don't have any skill yet
+              </FlatListEmptyText>
+            </FlatListEmptyContainer>
           )}
           renderItem={({ item }) => (
-            <ListItemContainer activeOpacity={0.7}>
-              <ListItem>{item}</ListItem>
-            </ListItemContainer>
+            <FlatListItemContainer activeOpacity={0.7}>
+              <FlatListItem>{item}</FlatListItem>
+            </FlatListItemContainer>
           )}
         />
       </Container>
