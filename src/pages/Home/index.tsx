@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useCallback } from "react";
 import { FlatList, Keyboard, TouchableWithoutFeedback } from "react-native";
+import { isYesterday, isToday, format } from "date-fns";
 
 import Button from "../../components/Button";
 import Input from "../../components/Input";
@@ -13,27 +14,50 @@ import {
   FlatListEmptyIcon,
   FlatListEmptyText,
   FlatListItem,
-  FlatListItemContainer,
+  FlatListItemTitle,
+  FlatListItemDate,
 } from "./styles";
+
+interface ISkill {
+  id: number;
+  title: string;
+  date: string;
+}
 
 export const Home: React.FC = () => {
   const [greeting, setGreeting] = useState<string | null>(null);
   const [skill, setSkill] = useState<string | null>(null);
-  const [skills, addSkill] = useState<string[]>([]);
+  const [skills, addSkill] = useState<ISkill[]>([]);
 
   const handleAdd = useCallback(() => {
     if (!skill) {
       return;
     }
 
-    const exists = skills.find((s) => s == skill);
+    const exists = skills.find((s) => s.title == skill);
 
     if (exists) {
       return;
     }
 
+    const currentDate = new Date();
+
+    let currentDateString: string;
+
+    if (isYesterday(currentDate)) {
+      currentDateString = "Added Yesterday";
+    } else if (isToday(currentDate)) {
+      currentDateString = "Added Today";
+    } else {
+      currentDateString = `Added in ${format(currentDate, "dd/MM/yyyy")}`;
+    }
+
+    addSkill((prev) => {
+      const nextId = prev.length > 0 ? prev[0].id + 1 : 1;
+      return [{ id: nextId, date: currentDateString, title: skill }, ...prev];
+    });
+
     setSkill(null);
-    addSkill((prev) => [skill, ...prev]);
   }, [skill, skills]);
 
   useEffect(() => {
@@ -44,7 +68,7 @@ export const Home: React.FC = () => {
     } else if (currentHour >= 12 && currentHour < 18) {
       setGreeting("Good afternoon");
     } else {
-      setGreeting("Good nigth");
+      setGreeting("Good night");
     }
   }, []);
 
@@ -57,17 +81,17 @@ export const Home: React.FC = () => {
           value={skill}
           onChangeText={setSkill}
           onSubmitEditing={handleAdd}
-          placeholder="New skill"
+          placeholder="Add your skill here :)"
           placeholderTextColor="#555"
         />
         <Button activeOpacity={0.7} onPress={handleAdd}>
           Add
         </Button>
         <FlatListTitle>My Skills</FlatListTitle>
-        <FlatList<string>
+        <FlatList<ISkill>
           style={{ marginTop: 20 }}
           data={skills}
-          keyExtractor={(item) => item}
+          keyExtractor={(item) => item.id.toString()}
           ListEmptyComponent={() => (
             <FlatListEmptyContainer>
               <FlatListEmptyIcon>¯\_(ツ)_/¯</FlatListEmptyIcon>
@@ -77,9 +101,10 @@ export const Home: React.FC = () => {
             </FlatListEmptyContainer>
           )}
           renderItem={({ item }) => (
-            <FlatListItemContainer activeOpacity={0.7}>
-              <FlatListItem>{item}</FlatListItem>
-            </FlatListItemContainer>
+            <FlatListItem activeOpacity={0.7}>
+              <FlatListItemTitle>{item.title}</FlatListItemTitle>
+              <FlatListItemDate>{item.date}</FlatListItemDate>
+            </FlatListItem>
           )}
         />
       </Container>

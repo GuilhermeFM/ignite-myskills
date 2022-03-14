@@ -4,8 +4,7 @@ import styled from "styled-components/native";
 export const Container = styled.View`
   flex: 1;
   background-color: #121015;
-  padding-horizontal: 25px;
-  padding-vertical: 20px;
+  padding: 20px 25px 5px 25px;
 `;
 
 export const Title = styled.Text`
@@ -48,14 +47,19 @@ export const FlatListEmptyText = styled.Text`
   text-align: center;
 `;
 
-export const FlatListItemContainer = styled.TouchableOpacity`
-  padding: 15px;
+export const FlatListItem = styled.TouchableOpacity`
+  padding: 10px 15px 10px 15px;
   margin-bottom: 15px;
-  border-radius: 99px;
+  border-radius: 20px;
   background-color: #1f1e25;
 `;
 
-export const FlatListItem = styled.Text`
+export const FlatListItemTitle = styled.Text`
   color: #fff;
   font-size: 17px;
+`;
+
+export const FlatListItemDate = styled.Text`
+  color: #ffffff55;
+  font-size: 10px;
 `;
