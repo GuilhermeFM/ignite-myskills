@@ -21,7 +21,7 @@ import {
 interface ISkill {
   id: number;
   title: string;
-  date: string;
+  date: Date;
 }
 
 export const Home: React.FC = () => {
@@ -40,25 +40,23 @@ export const Home: React.FC = () => {
       return;
     }
 
-    const currentDate = new Date();
-
-    let currentDateString: string;
-
-    if (isYesterday(currentDate)) {
-      currentDateString = "Added Yesterday";
-    } else if (isToday(currentDate)) {
-      currentDateString = "Added Today";
-    } else {
-      currentDateString = `Added in ${format(currentDate, "dd/MM/yyyy")}`;
-    }
-
     addSkill((prev) => {
       const nextId = prev.length > 0 ? prev[0].id + 1 : 1;
-      return [{ id: nextId, date: currentDateString, title: skill }, ...prev];
+      return [{ id: nextId, date: new Date(), title: skill }, ...prev];
     });
 
     setSkill(null);
   }, [skill, skills]);
+
+  const formatDate = useCallback((date: Date) => {
+    if (isYesterday(date)) {
+      return "Added Yesterday";
+    }
+    if (isToday(date)) {
+      return "Added Today";
+    }
+    return `Added in ${format(date, "dd/MM/yyyy")}`;
+  }, []);
 
   useEffect(() => {
     const currentHour = new Date().getHours();
@@ -103,7 +101,7 @@ export const Home: React.FC = () => {
           renderItem={({ item }) => (
             <FlatListItem activeOpacity={0.7}>
               <FlatListItemTitle>{item.title}</FlatListItemTitle>
-              <FlatListItemDate>{item.date}</FlatListItemDate>
+              <FlatListItemDate>{formatDate(item.date)}</FlatListItemDate>
             </FlatListItem>
           )}
         />
