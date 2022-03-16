@@ -48,6 +48,13 @@ export const Home: React.FC = () => {
     setSkill(null);
   }, [skill, skills]);
 
+  const handleRemove = useCallback(
+    (id: number) => {
+      addSkill((prev) => prev.filter((item) => item.id != id));
+    },
+    [skills]
+  );
+
   const formatDate = useCallback((date: Date) => {
     if (isYesterday(date)) {
       return "Added Yesterday";
@@ -99,7 +106,12 @@ export const Home: React.FC = () => {
             </FlatListEmptyContainer>
           )}
           renderItem={({ item }) => (
-            <FlatListItem activeOpacity={0.7}>
+            <FlatListItem
+              activeOpacity={0.7}
+              onLongPress={() => {
+                handleRemove(item.id);
+              }}
+            >
               <FlatListItemTitle>{item.title}</FlatListItemTitle>
               <FlatListItemDate>{formatDate(item.date)}</FlatListItemDate>
             </FlatListItem>
